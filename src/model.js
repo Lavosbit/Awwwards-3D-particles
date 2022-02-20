@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler'
@@ -12,6 +13,8 @@ class Model {
         this.file = obj.file
         this.scene = obj.scene
         this.placeOnLoad = obj.placeOnLoad
+
+        this.isActive = false
 
         this.color1 = obj.color1
         this.color2 = obj.color2
@@ -59,7 +62,9 @@ class Model {
             this.particlesMaterial = new THREE.ShaderMaterial({
                 uniforms: {
                     uColor1: { value: new THREE.Color(this.color1)},
-                    uColor2: { value: new THREE.Color(this.color2)}
+                    uColor2: { value: new THREE.Color(this.color2)},
+                    uTime: { value: 0 },
+                    uScale: { value: 0 }
                 },
                 vertexShader: vertex,
                 fragmentShader: fragment,
@@ -77,6 +82,7 @@ class Model {
             const numParticles = 20000
             this.particlesGeometry = new THREE.BufferGeometry()
             const particlesPostion = new Float32Array(numParticles * 3)
+            const particlesRandomness = new Float32Array(numParticles * 3)
 
             for (let i = 0; i < numParticles; i++) {
                 const newPosition = new THREE.Vector3()
@@ -86,9 +92,16 @@ class Model {
                     newPosition.y,
                     newPosition.z
                 ], i * 3)
+
+                particlesRandomness.set([
+                    Math.random() * 2 - 1, // -1 to 1
+                    Math.random() * 2 - 1,
+                    Math.random() * 2 - 1
+                ], i * 3)
             }
 
             this.particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlesPostion, 3))
+            this.particlesGeometry.setAttribute('aRandom', new THREE.BufferAttribute(particlesRandomness, 3))
             
             console.log(this.particlesGeometry)
 
@@ -109,10 +122,26 @@ class Model {
 
     add() {
         this.scene.add(this.particles)
+        this.isActive = true
+
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 1,
+            duration: .8,
+            delay: .3,
+            ease: 'power3.out'
+        })
     }
 
     remove() {
-        this.scene.remove(this.particles)
+        gsap.to(this.particlesMaterial.uniforms.uScale, {
+            value: 0,
+            duration: .8,
+            ease: 'power3.out',
+            onComplete: () => {
+                this.scene.remove(this.particles)
+                this.isActive = false
+            }
+        })
     }
 }
 export default Model
