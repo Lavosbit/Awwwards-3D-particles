@@ -2,6 +2,7 @@ import * as THREE from 'three'
 // import { LogLuvEncoding } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Model from './model';
+import gsap from 'gsap'
 
 /*------------------------------
 Renderer
@@ -60,8 +61,9 @@ const logo = new Model ({
   name: 'logo',
   file: './models/logo.glb',
   scene: scene,
-  color1: 'red',
-  color2: 'yelow',
+  color1: '#0FC2ED ',
+  color2: '#47A86e',
+  background: '#102A30',
   placeOnLoad: true,
 })
 const horse = new Model ({
@@ -70,6 +72,7 @@ const horse = new Model ({
   scene: scene,
   color1: 'blue',
   color2: 'pink',
+  background: '#110047',
   placeOnLoad: false,
 })
 
@@ -125,3 +128,17 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
 window.addEventListener( 'resize', onWindowResize, false );
+
+/*------------------------------
+MouseMove
+------------------------------*/
+function onMouseMove(e) {
+  const x = e.clientX
+  const y = e.clientY
+
+  gsap.to(scene.rotation, {
+    y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
+    x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+  })
+}
+window.addEventListener('mousemove', onMouseMove)
