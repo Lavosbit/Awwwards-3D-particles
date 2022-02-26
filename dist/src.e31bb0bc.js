@@ -45386,7 +45386,7 @@ exports.MeshSurfaceSampler = MeshSurfaceSampler;
 },{"../../../build/three.module.js":"../node_modules/three/build/three.module.js"}],"shader/vertexShader.glsl":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\n// attribute vec3 position;\nattribute vec3 aRandom;\n\nvarying vec3 vPosition;\n\nuniform float uTime;\nuniform float uScale;\n\nvoid main() {\n    vPosition = position;\n\n    float time = uTime * 4.0;\n\n    vec3 pos = position;\n    pos.x += sin(time * aRandom.x) * 0.01;\n    pos.y += cos(time * aRandom.y) * 0.01;\n    pos.z += cos(time * aRandom.z) * 0.01;\n\n    pos.x *= uScale + (sin(pos.y * 4.0 + time) * (1.0 - uScale));\n    pos.y *= uScale + (cos(pos.z * 4.0 + time) * (1.0 - uScale));\n    pos.z *= uScale + (sin(pos.x * 4.0 + time) * (1.0 - uScale));\n\n    pos *= uScale;\n\n    vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );\n    gl_Position = projectionMatrix * mvPosition;\n    gl_PointSize = 8.0 / -mvPosition.z;\n}";
 },{}],"shader/fragmentShader.glsl":[function(require,module,exports) {
-module.exports = "#define GLSLIFY 1\nvarying vec3 vPosition;\n\nuniform vec3 uColor1;\nuniform vec3 uColor2;\n\nvoid main() {\n    vec3 color = vec3(1.0, 1.0, 0.0);\n    color = vec3(1.0, 1.0, 0.0);\n    color.r = 0.0;\n\n    vec3 color1 = vec3(10.0/255.0, 20.0/255.0, 100.0/255.0); // rgb(10, 20, 100)\n    vec3 color2 = vec3(1.0, 1.0, 0.0);\n\n    float depth = vPosition.x * 0.5 + 0.5;\n    color = mix(uColor1, uColor2, depth);\n    gl_FragColor = vec4(color, depth * 0.3 + 0.125);\n}\n";
+module.exports = "#define GLSLIFY 1\nvarying vec3 vPosition;\n\nuniform vec3 uColor1;\nuniform vec3 uColor2;\n\nvoid main() {\n    vec3 color = vec3(1.0, 1.0, 0.0);\n    color = vec3(1.0, 1.0, 0.0);\n    color.r = 0.0;\n\n    vec3 color1 = vec3(10.0/255.0, 20.0/255.0, 100.0/255.0); // rgb(10, 20, 100)\n    vec3 color2 = vec3(1.0, 1.0, 0.0);\n\n    float depth = vPosition.x * 0.5 + 0.5;\n    color = mix(uColor1, uColor2, depth);\n    gl_FragColor = vec4(color, depth * .75 + 0.125);\n}\n";
 },{}],"model.js":[function(require,module,exports) {
 "use strict";
 
@@ -45504,7 +45504,7 @@ function () {
         ------------------------------*/
 
         var sampler = new _MeshSurfaceSampler.MeshSurfaceSampler(_this.mesh).build();
-        var numParticles = 20000;
+        var numParticles = 16000;
         _this.particlesGeometry = new THREE.BufferGeometry();
         var particlesPostion = new Float32Array(numParticles * 3);
         var particlesRandomness = new Float32Array(numParticles * 3);
@@ -45542,7 +45542,7 @@ function () {
       this.scene.add(this.particles);
 
       _gsap.default.to(this.particlesMaterial.uniforms.uScale, {
-        value: 1,
+        value: 1.,
         duration: .8,
         delay: .3,
         ease: 'power3.out'
@@ -45584,7 +45584,7 @@ function () {
 
       _gsap.default.to(this.particles.rotation, {
         y: Math.PI,
-        duration: .9,
+        duration: .8,
         ease: 'power3.out'
       });
     }
@@ -45646,6 +45646,7 @@ OrbitControls
 ------------------------------*/
 
 var controls = new _OrbitControls.OrbitControls(camera, renderer.domElement);
+controls.enabled = false;
 /*------------------------------
 Helpers
 ------------------------------*/
@@ -45662,7 +45663,7 @@ var logo = new _model.default({
   name: 'logo',
   file: './models/logo.glb',
   scene: scene,
-  color1: '#0FC2ED ',
+  color1: '#0FC2ED',
   color2: '#47A86e',
   background: '#102A30',
   placeOnLoad: true
@@ -45678,7 +45679,11 @@ var horse = new _model.default({
 }); // const rocket = new Model ({
 //   name: 'rocket',
 //   file: './models/rocket.glb',
-//   scene: scene
+//   scene: scene,
+//   color1: 'blue',
+//   color2: 'pink',
+//   background: '#110047',
+//   placeOnLoad: false,
 // })
 
 /*------------------------------
@@ -45733,8 +45738,8 @@ MouseMove
 ------------------------------*/
 
 function onMouseMove(e) {
-  var x = e.clientX;
-  var y = e.clientY;
+  var x = e.clientX * 2.15;
+  var y = e.clientY * 2.15;
 
   _gsap.default.to(scene.rotation, {
     y: _gsap.default.utils.mapRange(0, window.innerWidth, .2, -.2, x),
@@ -45771,7 +45776,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63578" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54978" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

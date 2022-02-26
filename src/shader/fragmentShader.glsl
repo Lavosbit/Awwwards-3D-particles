@@ -13,5 +13,5 @@ void main() {
 
     float depth = vPosition.x * 0.5 + 0.5;
     color = mix(uColor1, uColor2, depth);
-    gl_FragColor = vec4(color, depth * 0.3 + 0.125);
+    gl_FragColor = vec4(color, depth * .75 + 0.125);
 }

@@ -80,7 +80,7 @@ class Model {
             Particles Geometry
             ------------------------------*/
             const sampler = new MeshSurfaceSampler(this.mesh).build()
-            const numParticles = 20000
+            const numParticles = 16000
             this.particlesGeometry = new THREE.BufferGeometry()
             const particlesPostion = new Float32Array(numParticles * 3)
             const particlesRandomness = new Float32Array(numParticles * 3)
@@ -125,7 +125,7 @@ class Model {
         this.scene.add(this.particles)
         
         gsap.to(this.particlesMaterial.uniforms.uScale, {
-            value: 1,
+            value: 1.,
             duration: .8,
             delay: .3,
             ease: 'power3.out'
@@ -163,7 +163,7 @@ class Model {
 
         gsap.to(this.particles.rotation, {
             y: Math.PI,
-            duration: .9,
+            duration: .8,
             ease: 'power3.out'
         })
     }

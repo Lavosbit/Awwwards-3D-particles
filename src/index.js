@@ -44,7 +44,7 @@ Mesh
 OrbitControls
 ------------------------------*/
 const controls = new OrbitControls( camera, renderer.domElement );
-
+controls.enabled = false
 
 /*------------------------------
 Helpers
@@ -61,7 +61,7 @@ const logo = new Model ({
   name: 'logo',
   file: './models/logo.glb',
   scene: scene,
-  color1: '#0FC2ED ',
+  color1: '#0FC2ED',
   color2: '#47A86e',
   background: '#102A30',
   placeOnLoad: true,
@@ -79,13 +79,18 @@ const horse = new Model ({
 // const rocket = new Model ({
 //   name: 'rocket',
 //   file: './models/rocket.glb',
-//   scene: scene
+//   scene: scene,
+//   color1: 'blue',
+//   color2: 'pink',
+//   background: '#110047',
+//   placeOnLoad: false,
 // })
 
 /*------------------------------
 Controllers
 ------------------------------*/
 const buttons = document.querySelectorAll('.button')
+
 buttons[0].addEventListener('click', () => {
   logo.add()
   horse.remove()
@@ -133,8 +138,8 @@ window.addEventListener( 'resize', onWindowResize, false );
 MouseMove
 ------------------------------*/
 function onMouseMove(e) {
-  const x = e.clientX
-  const y = e.clientY
+  const x = e.clientX * 2.15
+  const y = e.clientY * 2.15
 
   gsap.to(scene.rotation, {
     y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
