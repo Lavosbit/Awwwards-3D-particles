@@ -143,7 +143,9 @@ function onMouseMove(e) {
 
   gsap.to(scene.rotation, {
     y: gsap.utils.mapRange(0, window.innerWidth, .2, -.2, x),
-    x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+    x: gsap.utils.mapRange(0, window.innerHeight, .2, -.2, y),
+    duration: .8,
+    ease: 'power3.out'
   })
 }
 window.addEventListener('mousemove', onMouseMove)

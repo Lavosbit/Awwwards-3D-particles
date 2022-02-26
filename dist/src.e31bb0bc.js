@@ -45743,7 +45743,9 @@ function onMouseMove(e) {
 
   _gsap.default.to(scene.rotation, {
     y: _gsap.default.utils.mapRange(0, window.innerWidth, .2, -.2, x),
-    x: _gsap.default.utils.mapRange(0, window.innerHeight, .2, -.2, y)
+    x: _gsap.default.utils.mapRange(0, window.innerHeight, .2, -.2, y),
+    duration: .8,
+    ease: 'power3.out'
   });
 }
 
@@ -45776,7 +45778,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54978" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62093" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
